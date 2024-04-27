@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('sections', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->unsignedBigInteger('parent')->default(0);
             $table->timestamps();
         });
     }

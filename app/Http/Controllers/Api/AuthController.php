@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\ApiHelper\ApiResponseHelper;
+use App\ApiHelper\Result;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Users\CreateUserRequest;
+use App\Http\Resources\Users\UserResource;
 use App\Models\User;
+use App\Services\Users\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -13,9 +18,9 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function __construct()
+    public function __construct(private UserService $userService)
     {
-        $this->middleware('auth:sanctum', ['except' => ['login', 'register']]);
+        $this->middleware('auth:sanctum', ['except' => ['login', 'register', 'create_user']]);
     }
 
     public function login(Request $request)
@@ -50,11 +55,10 @@ class AuthController extends Controller
                 }
 
                 $user = User::where('email', $request->email)->first();
-                $userAuth = auth()->user();
 
                 return response()->json([
                     'token' => $user->createToken("API TOKEN")->plainTextToken,
-                    'user' => $userAuth,
+                    'user' => UserResource::make($user),
                 ], 200);
             }
         } catch (\Throwable $th) {
@@ -64,24 +68,14 @@ class AuthController extends Controller
             ], 500);
         }
     }
-    public function register(Request $request)
+
+    public function create_user(CreateUserRequest $request)
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'min:8'],
-        ]);
-
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
-
-        // Assuming you are using Sanctum, create a token for the newly registered user
-        $token = $user->createToken('auth-token')->plainTextToken;
-
-        return response()->json(['token' => $token], 201);
+        $createdData = $this->userService->create_user($request->validated());
+        $returnData = UserResource::make($createdData);
+        return ApiResponseHelper::sendResponse(
+            new Result($returnData, "Done")
+        );
     }
 
     public function logout()
