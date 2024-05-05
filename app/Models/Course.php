@@ -8,4 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Course extends Model
 {
     use HasFactory;
+    protected $fillable = ['name', 'section_id', 'course_owner', 'price', 'number_of_participants'];
+
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'course_owner');
+    }
+
+    public function section()
+    {
+        return $this->belongsTo(Section::class, 'section_id');
+    }
 }
