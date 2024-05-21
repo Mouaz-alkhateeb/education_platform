@@ -23,7 +23,8 @@ class UpdateSectionRequest extends FormRequest
     {
         return [
             'section_id' => 'required|exists:sections,id',
-            'name' => 'nullable|string|unique:sections,name'
+            'name' => 'nullable|string|unique:sections,name',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
         ];
     }
 }

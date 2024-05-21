@@ -23,7 +23,8 @@ class CreateSectionRequest extends FormRequest
     {
         return [
             'name' => 'required|string|unique:sections,name',
-            'parent' => "nullable|exists:sections,id"
+            'parent' => "nullable|exists:sections,id",
+            'image' => 'required|image|mimes:jpeg,png,jpg|max:2048'
         ];
     }
 }

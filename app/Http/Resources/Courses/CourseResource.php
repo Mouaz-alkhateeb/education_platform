@@ -6,7 +6,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class CourseResource extends JsonResource
 {
-
     public function toArray($request)
     {
         return [
@@ -15,6 +14,8 @@ class CourseResource extends JsonResource
             'section' => $this->section->name,
             'course_owner' => $this->owner->name,
             'price' => $this->price,
+            'description' => $this->description,
+            'image' => $this->image ? url($this->image) : null,
         ];
     }
 }

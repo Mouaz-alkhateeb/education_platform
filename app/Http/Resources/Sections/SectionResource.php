@@ -13,6 +13,7 @@ class SectionResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'parent' => $this->parent,
+            'image' => $this->image ? url($this->image) : null,
         ];
     }
 }

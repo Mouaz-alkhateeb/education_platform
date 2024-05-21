@@ -3,12 +3,15 @@
 namespace App\Repository\Sections;
 
 use App\Filters\Sections\SectionFilter;
+use App\Http\Trait\UploadImage;
 use App\Models\Section;
 use App\Repository\BaseRepositoryImplementation;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Arr;
 
 class SectionRepository extends BaseRepositoryImplementation
 {
+    use UploadImage;
     public function getFilterItems($filter)
     {
 
@@ -37,6 +40,11 @@ class SectionRepository extends BaseRepositoryImplementation
             if ($section && isset($data['parent'])) {
                 $section->parent = $data['parent'];
             }
+            if (Arr::has($data, 'image')) {
+                $file = Arr::get($data, 'image');
+                $file_name = $this->uploadSectionAttachment($file);
+                $section->image = $file_name;
+            }
             $section->save();
             DB::commit();
             return $section;
@@ -54,6 +62,11 @@ class SectionRepository extends BaseRepositoryImplementation
                 $section->update([
                     'name' => $data['name'],
                 ]);
+            }
+            if (Arr::has($data, 'image')) {
+                $file = Arr::get($data, 'image');
+                $file_name = $this->uploadSectionAttachment($file);
+                $section->image = $file_name;
             }
             DB::commit();
             return $section;

@@ -25,6 +25,8 @@ class CourseController extends Controller
             new Result($returnData, "Done")
         );
     }
+
+
     public function update_course(UpdateCourseRequest $request)
     {
         $createdData = $this->courseService->update_course($request->validated());

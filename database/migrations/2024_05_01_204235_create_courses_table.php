@@ -1,5 +1,6 @@
 <?php
 
+use App\Statuses\CourseStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,6 +19,9 @@ return new class extends Migration
             $table->foreignId('course_owner')->constrained('users')->noActionOnDelete();
             $table->float('price', 8, 2)->nullable();
             $table->integer('number_of_participants')->nullable();
+            $table->tinyInteger('status')->default(CourseStatus::UN_ACTIVE);
+            $table->longText('image');
+            $table->longText('description');
             $table->timestamps();
         });
     }

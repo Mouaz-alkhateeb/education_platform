@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Courses;
+namespace App\Http\Requests\Cart;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateCourseRequest extends FormRequest
+class CreateCartRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,10 +22,7 @@ class UpdateCourseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'course_id' => "required|exists:courses,id",
-            'name' => 'nullable|string',
-            'price' => 'nullable|numeric',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
+            'course_id' => 'required|exists:courses,id'
         ];
     }
 }

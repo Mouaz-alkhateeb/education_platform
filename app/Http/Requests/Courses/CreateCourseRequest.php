@@ -25,7 +25,9 @@ class CreateCourseRequest extends FormRequest
             'name' => 'required|string',
             'section_id' => "required|exists:sections,id",
             'course_owner' => "required|exists:users,id",
-            'price' => 'required|numeric'
+            'price' => 'required|numeric',
+            'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'description' => 'required'
         ];
     }
 }

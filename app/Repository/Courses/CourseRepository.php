@@ -3,12 +3,17 @@
 namespace App\Repository\Courses;
 
 use App\Filters\Courses\CourseFilter;
+use App\Http\Trait\UploadImage;
 use App\Models\Course;
 use App\Repository\BaseRepositoryImplementation;
+use App\Statuses\CourseStatus;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 
 class CourseRepository extends BaseRepositoryImplementation
 {
+    use UploadImage;
     public function getFilterItems($filter)
     {
 
@@ -30,13 +35,22 @@ class CourseRepository extends BaseRepositoryImplementation
 
     public function create_course($data)
     {
+
         DB::beginTransaction();
         try {
             $course = new Course();
             $course->name = $data['name'];
             $course->section_id = $data['section_id'];
             $course->course_owner = $data['course_owner'];
+            $course->status = CourseStatus::UN_ACTIVE;
             $course->price = $data['price'];
+            $course->description = $data['description'];
+            if (Arr::has($data, 'image')) {
+                $file = Arr::get($data, 'image');
+                $file_name = $this->uploadCourseAttachment($file);
+                $course->image = $file_name;
+            }
+
             $course->save();
 
             DB::commit();
@@ -45,6 +59,11 @@ class CourseRepository extends BaseRepositoryImplementation
             DB::rollback();
         }
     }
+
+
+
+
+
     public function update_course($data)
     {
         DB::beginTransaction();
@@ -61,6 +80,11 @@ class CourseRepository extends BaseRepositoryImplementation
                     'price' => $data['price'],
                 ]);
             }
+            if (Arr::has($data, 'image')) {
+                $file = Arr::get($data, 'image');
+                $file_name = $this->uploadCourseAttachment($file);
+                $course->image = $file_name;
+            }
             DB::commit();
             return $course;
         } catch (\Throwable $th) {
@@ -69,13 +93,13 @@ class CourseRepository extends BaseRepositoryImplementation
     }
     public function delete_Course(int $id)
     {
-            $course = Course::where('id', $id)->first();
+        $course = Course::where('id', $id)->first();
 
-            if ($course) {
-                $course->delete();
-                return response()->json(['message' => 'Course Delete Successfully'], 200);
-            } else {
-                return response()->json(['message' => 'Course Not Found'], 404);
-            }
+        if ($course) {
+            $course->delete();
+            return response()->json(['message' => 'Course Delete Successfully'], 200);
+        } else {
+            return response()->json(['message' => 'Course Not Found'], 404);
+        }
     }
 }
