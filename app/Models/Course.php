@@ -19,4 +19,9 @@ class Course extends Model
     {
         return $this->belongsTo(Section::class, 'section_id');
     }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
 }

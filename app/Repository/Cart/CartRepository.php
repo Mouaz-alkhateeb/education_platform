@@ -73,4 +73,10 @@ class CartRepository extends BaseRepositoryImplementation
             return response()->json(["status" => "Login To Continue..!!"]);
         }
     }
+
+    public function cart_count()
+    {
+        $count = Cart::where('user_id', Auth::id())->count();
+        return response()->json(["count" => $count]);
+    }
 }

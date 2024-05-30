@@ -2,8 +2,12 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CartController;
+use App\Http\Controllers\Api\CheckoutController;
 use App\Http\Controllers\Api\CourseController;
+use App\Http\Controllers\Api\RatingController;
+use App\Http\Controllers\Api\ReviewController;
 use App\Http\Controllers\Api\SectionController;
+use App\Http\Controllers\Api\WishlistController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -40,6 +44,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/create_course', [CourseController::class, 'create_course']);
     Route::post('update_course', [CourseController::class, 'update_course']);
     Route::delete('/delete_course/{id}', [CourseController::class, 'delete_course']);
+    Route::patch('/update_course_status/{id}', [CourseController::class, 'update_status']);
     Route::get('/show/{id}', [CourseController::class, 'show']);
     Route::get('list_of_courses', [CourseController::class, 'list_of_courses']);
 
@@ -48,4 +53,18 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/enroll_in_course', [CartController::class, 'enroll_in_course']);
     Route::get('/my_cart', [CartController::class, 'show']);
     Route::delete('/delete_cart_course/{id}', [CartController::class, 'delete_cart_course']);
+    Route::get('cart_count', [CartController::class, 'cart_count']);
+    Route::post('place_order', [CheckoutController::class, 'place_order']);
+    Route::get('orders', [CheckoutController::class, 'my_orders']);
+
+
+    Route::get('wishlist', [WishlistController::class, 'show']);
+    Route::post('add_to_wishlist', [WishlistController::class, 'add_to_wishlist']);
+    Route::get('wishlist_count', [WishlistController::class, 'wishlist_count']);
+    Route::delete('/remove_wishlist_item/{id}', [WishlistController::class, 'remove_wishlist_item']);
+
+    Route::post('rating', [RatingController::class, 'rating']);
+    Route::post('review', [ReviewController::class, 'review']);
+    Route::post('update_review', [ReviewController::class, 'update_review']);
+    Route::delete('/delete_review/{id}', [ReviewController::class, 'delete_review']);
 });

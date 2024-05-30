@@ -43,4 +43,11 @@ class CartController extends Controller
             return response()->json(['message' => 'Error Deleting Course From Cart,Please Try Again'], 500);
         }
     }
+
+
+    public function cart_count()
+    {
+        $deletionResult = $this->courseService->cart_count();
+        return $deletionResult;
+    }
 }

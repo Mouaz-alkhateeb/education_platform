@@ -19,6 +19,10 @@ class CourseService implements CourseServiceInterface
     {
         return $this->courseRepository->update_course($data);
     }
+    public function update_status($id)
+    {
+        return $this->courseRepository->update_status($id);
+    }
     public function delete_Course(int $id)
     {
         return $this->courseRepository->delete_Course($id);
@@ -32,6 +36,6 @@ class CourseService implements CourseServiceInterface
     }
     public function show(int $id)
     {
-        return $this->courseRepository->getById($id);
+        return $this->courseRepository->getById($id)->load('reviews');
     }
 }

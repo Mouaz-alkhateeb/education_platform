@@ -22,7 +22,7 @@ class CourseRepository extends BaseRepositoryImplementation
             $records->when(isset($filter->name), function ($records) use ($filter) {
                 $records->where('name', 'LIKE', '%' . $filter->getName() . '%');
             });
-            return $records->get();
+            return $records->get()->load('reviews');
         }
 
         return $records->get();
@@ -61,9 +61,6 @@ class CourseRepository extends BaseRepositoryImplementation
     }
 
 
-
-
-
     public function update_course($data)
     {
         DB::beginTransaction();
@@ -86,7 +83,22 @@ class CourseRepository extends BaseRepositoryImplementation
                 $course->image = $file_name;
             }
             DB::commit();
-            return $course;
+            return $course->load('reviews');
+        } catch (\Throwable $th) {
+            DB::rollback();
+        }
+    }
+
+    public function update_status($id)
+    {
+        DB::beginTransaction();
+        try {
+
+            $course = Course::where('id', $id)->first();
+            $course->update(['status' => 1]);
+
+            DB::commit();
+            return $course->load('reviews');
         } catch (\Throwable $th) {
             DB::rollback();
         }

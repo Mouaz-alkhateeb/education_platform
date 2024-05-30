@@ -36,6 +36,18 @@ class CourseController extends Controller
             new Result($returnData, "Done")
         );
     }
+
+    public function update_status($id)
+    {
+        $createdData = $this->courseService->update_status($id);
+
+        $returnData = CourseResource::make($createdData);
+        return ApiResponseHelper::sendResponse(
+            new Result($returnData, "Done")
+        );
+    }
+
+
     public function delete_course($id)
     {
         $deletionResult = $this->courseService->delete_course($id);

@@ -23,4 +23,10 @@ class CartService implements CartServiceInterface
     {
         return $this->cartRepository->delete_cart_course($id);
     }
+
+
+    public function cart_count()
+    {
+        return $this->cartRepository->cart_count();
+    }
 }
