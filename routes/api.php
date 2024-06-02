@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\CourseController;
 use App\Http\Controllers\Api\RatingController;
 use App\Http\Controllers\Api\ReviewController;
 use App\Http\Controllers\Api\SectionController;
+use App\Http\Controllers\Api\VideoController;
 use App\Http\Controllers\Api\WishlistController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -67,4 +68,18 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('review', [ReviewController::class, 'review']);
     Route::post('update_review', [ReviewController::class, 'update_review']);
     Route::delete('/delete_review/{id}', [ReviewController::class, 'delete_review']);
+
+
+
+    Route::post('/create_live_event', [VideoController::class, 'createLiveEvent']);
+    Route::post('/end_event/{id}', [VideoController::class, 'endEvent']);
+    Route::delete('/live_events/{liveEventId}', [VideoController::class, 'deleteEvent']);
+    Route::get('/live_events', [VideoController::class, 'getAllLiveEvents']);
+
+
+
+
+    Route::post('/upload', [VideoController::class, 'upload']);
+    Route::get('/videos/{videoId}/links', [VideoController::class, 'getVideoLinks']);
+    Route::delete('/videos/{videoId}', [VideoController::class, 'deleteVideo']);
 });
